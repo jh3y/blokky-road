@@ -1,0 +1,224 @@
+@property --showcase {
+  initial-value: 0deg;
+  inherits: false;
+  syntax: '<angle>';
+}
+
+* {
+  box-sizing: border-box;
+}
+
+*,
+*:after,
+*:before {
+  transform-style: preserve-3d;
+}
+
+:root {
+  --coefficient: 10;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  background: hsl(
+    var(--hue, 0),
+    calc(var(--saturation, 0) * 1%),
+    calc(var(--lightness, 90) * 1%)
+  );
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.scene__wrapper {
+  min-height: 100vh;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(calc(1 + var(--zoom, 0)));
+}
+
+.configurator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  max-height: 100vh;
+  overflow: auto;
+}
+
+.controls {
+  display: flex;
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+}
+
+.controls > * + * {
+  margin-left: 1rem;
+}
+
+.controls button {
+  height: 48px;
+  width: 48px;
+  cursor: pointer;
+}
+
+.controls button svg {
+  height: 2rem;
+  width: 2rem;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.scene {
+  --grid-line: hsla(0, 0%, 50%, calc(0.5 - var(--play-state, 0)));
+  --stop: calc((var(--coefficient) - 0.5) * 1px);
+  height: calc(var(--coefficient) * 50px);
+  width: calc(var(--coefficient) * 50px);
+  background: repeating-linear-gradient(
+      var(--grid-line) 0px 0.5px,
+      transparent 0.5px var(--stop),
+      var(--grid-line) var(--stop) calc(var(--coefficient) * 1px)
+    ),
+    repeating-linear-gradient(
+      90deg,
+      var(--grid-line) 0px 0.5px,
+      transparent 0.5px var(--stop),
+      var(--grid-line) var(--stop) calc(var(--coefficient) * 1px)
+    );
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  animation: showcase calc(var(--play-state) * 1s) running infinite linear;
+  transform: translate(-50%, -50%) rotateX(-32deg) rotateY(-32deg)
+    translate3d(
+      calc((var(--x, 0) * var(--coefficient, 0)) * 1px),
+      calc((var(--y, 0) * var(--coefficient, 0)) * 1px),
+      calc((var(--z, 0) * var(--coefficient, 0)) * 1px)
+    )
+    rotateX(90deg) rotateX(calc(var(--rotateX, 0) * 1deg))
+    rotateY(calc(var(--rotateY, 0) * 1deg))
+    rotateZ(calc(var(--rotateZ, 0) * 1deg)) rotateZ(var(--showcase, 0deg));
+}
+
+@keyframes showcase {
+  0% {
+    --showcase: 0deg;
+  }
+  100% {
+    --showcase: 360deg;
+  }
+}
+
+.cuboid {
+  --coeff: calc(var(--coefficient) * 1px);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: calc(var(--depth) * var(--coeff));
+  width: calc(var(--width) * var(--coeff));
+  transform: translate(-50%, -50%)
+    translate3d(
+      calc(var(--x, 0) * var(--coeff)),
+      calc(var(--y, 0) * var(--coeff)),
+      calc(var(--z, 0) * var(--coeff))
+    )
+    rotateX(calc(var(--rotateX, 0) * 1deg))
+    rotateY(calc(var(--rotateY, 0) * 1deg))
+    rotateZ(calc(var(--rotateZ, 0) * 1deg));
+  z-index: 2;
+}
+/*
+1,2,3,4,5,6
+F,L,Ba,R,T,Bo
+*/
+.cuboid > div {
+  position: absolute;
+  border: calc(var(--borderWidth, 0) * 1px) solid
+    var(--borderColor, transparent);
+}
+
+.cuboid > div:nth-of-type(1) {
+  height: calc(var(--height) * var(--coeff));
+  width: calc(var(--width) * var(--coeff));
+  bottom: 0;
+  left: 0;
+  background: hsl(
+    var(--hue, 0),
+    calc(var(--saturation, 80) * 1%),
+    calc(var(--lightness, 70) * 1%)
+  );
+  transform: translate(0, 50%) rotateX(-90deg);
+}
+.cuboid > div:nth-of-type(2) {
+  height: calc(var(--height) * var(--coeff));
+  width: calc(var(--depth) * var(--coeff));
+  top: 50%;
+  left: 50%;
+  background: hsl(
+    var(--hue, 0),
+    calc(var(--saturation, 80) * 1%),
+    calc((var(--lightness, 70) - 30) * 1%)
+  );
+  transform: translate(-50%, -50%) rotateX(90deg) rotateY(-90deg)
+    translate3d(0, 0, calc(var(--width, 0) * calc(var(--coeff) * 0.5)));
+}
+.cuboid > div:nth-of-type(3) {
+  height: calc(var(--height) * var(--coeff));
+  width: calc(var(--width) * var(--coeff));
+  top: 0;
+  left: 0;
+  background: hsl(
+    var(--hue, 0),
+    calc(var(--saturation, 80) * 1%),
+    calc((var(--lightness, 70) - 40) * 1%)
+  );
+  transform: translate(0, -50%) rotateX(90deg);
+}
+.cuboid > div:nth-of-type(4) {
+  height: calc(var(--height) * var(--coeff));
+  width: calc(var(--depth) * var(--coeff));
+  top: 50%;
+  left: 50%;
+  background: hsl(
+    var(--hue, 0),
+    calc(var(--saturation, 80) * 1%),
+    calc((var(--lightness, 70) - 20) * 1%)
+  );
+  transform: translate(-50%, -50%) rotateX(90deg) rotateY(90deg)
+    translate3d(0, 0, calc(var(--width) * calc(var(--coeff) * 0.5)));
+}
+.cuboid > div:nth-of-type(5) {
+  height: calc(var(--depth) * var(--coeff));
+  width: calc(var(--width) * var(--coeff));
+  top: 0;
+  left: 0;
+  background: hsl(
+    var(--hue, 0),
+    calc(var(--saturation, 80) * 1%),
+    calc((var(--lightness, 70) - 10) * 1%)
+  );
+  transform: translate3d(0, 0, calc(var(--height) * calc(var(--coeff) * 0.5)));
+}
+.cuboid > div:nth-of-type(6) {
+  height: calc(var(--depth) * var(--coeff));
+  width: calc(var(--width) * var(--coeff));
+  top: 0;
+  left: 0;
+  background: hsl(
+    var(--hue, 0),
+    calc(var(--saturation, 80) * 1%),
+    calc((var(--lightness, 70) - 50) * 1%)
+  );
+  transform: translate3d(0, 0, calc(var(--height) * calc(var(--coeff) * -0.5)));
+}

@@ -1,0 +1,16 @@
+export default {
+  hue: 0,
+  saturation: 0,
+  lightness: 90,
+  rotateX: 0,
+  rotateY: 0,
+  rotateZ: 0,
+  height: 10,
+  width: 10,
+  depth: 10,
+  zoom: 0,
+  coefficient: 10,
+  x: 0,
+  y: 0,
+  z: 0,
+}
